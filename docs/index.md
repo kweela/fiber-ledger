@@ -2,7 +2,7 @@
 layout: home
 
 hero:
-  name: '@kweela/fiber-ledger'
+  name: 'Fiber Ledger by Kweela'
   text: 'CKB and Fiber, as a ledger'
   tagline: Wallets, balances, transfers, deposits and withdrawals on Nervos CKB, with optional fast payments over Fiber.
   actions:

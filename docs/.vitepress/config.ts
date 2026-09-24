@@ -9,7 +9,7 @@ import { defineConfig } from 'vitepress'
  * local development and for a user or custom-domain site.
  */
 export default defineConfig({
-  title: 'Kweela Fiber Ledger',
+  title: 'Fiber Ledger by Kweela',
   description:
     'Wallets, balances, transfers, deposits and withdrawals on Nervos CKB, with optional fast payments over Fiber.',
   base: process.env.____DOCS_BASE ?? '/',

@@ -1,4 +1,4 @@
-# @kweela/fiber-ledger
+# Fiber Ledger by Kweela
 
 A utility for building wallets, balances, transfers, deposits and withdrawals on Nervos CKB, with optional fast payments over Fiber.
 
