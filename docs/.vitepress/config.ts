@@ -16,9 +16,13 @@ export default defineConfig({
   lastUpdated: true,
   cleanUrls: true,
 
-  head: [['meta', { name: 'theme-color', content: '#0f766e' }]],
+  head: [
+    ['meta', { name: 'theme-color', content: '#0f766e' }],
+    ['link', { rel: 'icon', type: 'image/png', href: '/favicon.png' }],
+  ],
 
   themeConfig: {
+    logo: '/logo.png',
     nav: [
       { text: 'Guide', link: '/guide/getting-started' },
       { text: 'Reference', link: '/reference/configuration' },

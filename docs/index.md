@@ -4,6 +4,9 @@ layout: home
 hero:
   name: 'Fiber Ledger by Kweela'
   text: 'CKB and Fiber, as a ledger'
+  image:
+    src: /logo.png
+    alt: Fiber Ledger Logo
   tagline: Wallets, balances, transfers, deposits and withdrawals on Nervos CKB, with optional fast payments over Fiber.
   actions:
     - theme: brand
