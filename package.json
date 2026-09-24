@@ -1,6 +1,6 @@
 {
   "name": "@kweela/fiber-ledger",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "A CKB ledger with Fiber payment channels: embedded wallets, capacity and xUDT balances, and off-chain settlement",
   "type": "module",
   "license": "MIT",
