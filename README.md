@@ -1,5 +1,9 @@
 # Fiber Ledger by Kweela
 
+[![Downloads](https://img.shields.io/npm/dt/@kweela/fiber-ledger?style=flat-square&link=https%3A%2F%2Fwww.npmjs.com%2Fpackage%2F@kweela/fiber-ledger)](https://www.npmjs.com/package/@kweela/fiber-ledger)
+[![Deploy Documentation](https://github.com/kweela/fiber-ledger/actions/workflows/docs.yml/badge.svg)](https://github.com/kweela/fiber-ledger/actions/workflows/docs.yml)
+[![CI](https://github.com/kweela/fiber-ledger/actions/workflows/ci.yml/badge.svg)](https://github.com/kweela/fiber-ledger/actions/workflows/ci.yml)
+
 A utility for building wallets, balances, transfers, deposits and withdrawals on Nervos CKB, with optional fast payments over Fiber.
 
 It keeps CKB and Fiber implementation details inside the package so applications can work with a compact ledger API instead of dealing directly with cells, locks, scripts, transaction construction, signing, fees, RPC calls or payment channels.
