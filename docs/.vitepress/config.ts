@@ -12,7 +12,7 @@ export default defineConfig({
   title: '@kweela/fiber-ledger',
   description:
     'Wallets, balances, transfers, deposits and withdrawals on Nervos CKB, with optional fast payments over Fiber.',
-  base: process.env.DOCS_BASE ?? '/',
+  base: process.env.____DOCS_BASE ?? '/',
   lastUpdated: true,
   cleanUrls: true,
 
