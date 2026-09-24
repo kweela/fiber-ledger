@@ -3,3 +3,7 @@ article.box img.VPImage {
   padding: 10px;
   border-radius: 50%;
 }
+
+html.dark article.box img.VPImage {
+  filter: invert(1);
+}
