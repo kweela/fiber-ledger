@@ -26,6 +26,7 @@ export default defineConfig({
     nav: [
       { text: 'Guide', link: '/guide/getting-started' },
       { text: 'Reference', link: '/reference/configuration' },
+      { text: 'Github', link: 'https://github.com/kweela/fiber-ledger' },
       { text: 'npm', link: 'https://www.npmjs.com/package/@kweela/fiber-ledger' },
     ],
 

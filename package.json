@@ -16,6 +16,10 @@
       "import": "./dist/index.mjs"
     }
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kweela/fiber-ledger"
+  },
   "keywords": [
     "ckb",
     "nervos",
