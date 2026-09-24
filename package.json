@@ -44,7 +44,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
-    "@kweela/ledger": "link:../../halloffame.ng.plugins/packages/ledger",
+    "@kweela/ledger": "^0.1.0",
     "@types/node": "^25.0.0",
     "eslint": "^10.8.0",
     "eslint-config-prettier": "^10.1.8",
