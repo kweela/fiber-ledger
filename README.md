@@ -6,7 +6,7 @@ It keeps CKB and Fiber implementation details inside the package so applications
 
 It implements the [`@kweela/ledger`](https://www.npmjs.com/package/@kweela/ledger) interface, which it also depends on at runtime.
 
-📖 **[Documentation](https://kweela.github.io/kweela-fiber-ledger/)**
+📖 **[Documentation](https://fiberledger.kweela.com/)**
 
 ## Install
 
@@ -83,11 +83,11 @@ The ledger handles the CKB and Fiber-specific work internally and exposes a smal
 
 ## What else it does
 
-- [Asset modes](https://kweela.github.io/kweela-fiber-ledger/guide/asset-modes) — native CKB, or a token stored on CKB through xUDT or sUDT
-- [Wallets and custody](https://kweela.github.io/kweela-fiber-ledger/guide/wallets) — creating, importing, exporting, and wallets controlled elsewhere
-- [Fiber](https://kweela.github.io/kweela-fiber-ledger/guide/fiber) — fast off-chain payments, and falling back to the chain when no route exists
-- [Idempotency](https://kweela.github.io/kweela-fiber-ledger/guide/idempotency) — making retries safe before moving real value
-- [Errors](https://kweela.github.io/kweela-fiber-ledger/reference/errors) — the fixed set of failures CKB and Fiber conditions are translated into
+- [Asset modes](https://fiberledger.kweela.com/guide/asset-modes) — native CKB, or a token stored on CKB through xUDT or sUDT
+- [Wallets and custody](https://fiberledger.kweela.com/guide/wallets) — creating, importing, exporting, and wallets controlled elsewhere
+- [Fiber](https://fiberledger.kweela.com/guide/fiber) — fast off-chain payments, and falling back to the chain when no route exists
+- [Idempotency](https://fiberledger.kweela.com/guide/idempotency) — making retries safe before moving real value
+- [Errors](https://fiberledger.kweela.com/reference/errors) — the fixed set of failures CKB and Fiber conditions are translated into
 
 ## Development
 
