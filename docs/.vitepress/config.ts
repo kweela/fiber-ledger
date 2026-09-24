@@ -24,6 +24,7 @@ export default defineConfig({
   themeConfig: {
     logo: '/logo.png',
     nav: [
+      { text: 'Intro', link: '/guide/introduction' },
       { text: 'Guide', link: '/guide/getting-started' },
       { text: 'Reference', link: '/reference/configuration' },
     ],
