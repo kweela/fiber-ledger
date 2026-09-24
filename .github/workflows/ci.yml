@@ -1,0 +1,42 @@
+name: CI
+
+# Runs the package gate on every pull request, and on pushes to the default
+# branch so anything landing directly is checked too. The docs site has its own
+# workflow, which already builds on pull requests.
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+# A newer push supersedes an in-flight run for the same branch. Nothing here
+# publishes anything, so cancelling costs only the minutes already spent.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      # Linting, type checking, tests and the production build.
+      #
+      # The tests that move real value are gated on FIBER_LEDGER_TEST_URL and
+      # report themselves as skipped without it, so this needs no CKB or Fiber
+      # node. Pointing those at a devnet would run the conformance suite too.
+      - name: Check
+        run: pnpm check

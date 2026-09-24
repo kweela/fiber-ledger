@@ -1,0 +1,64 @@
+{
+  "name": "@kweela/fiber-ledger",
+  "version": "0.1.0",
+  "description": "A CKB ledger with Fiber payment channels: embedded wallets, capacity and xUDT balances, and off-chain settlement",
+  "type": "module",
+  "license": "MIT",
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "main": "./dist/index.mjs",
+  "types": "./dist/index.d.mts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.mts",
+      "import": "./dist/index.mjs"
+    }
+  },
+  "keywords": [
+    "ckb",
+    "nervos",
+    "fiber",
+    "payment-channels",
+    "ledger",
+    "wallet",
+    "xudt"
+  ],
+  "scripts": {
+    "build": "tsdown",
+    "check": "pnpm lint && tsc --noEmit && vitest run && tsdown",
+    "docs:build": "vitepress build docs",
+    "docs:dev": "vitepress dev docs",
+    "docs:preview": "vitepress preview docs",
+    "format": "prettier --write \"**/*.{ts,json,md}\"",
+    "lint": "eslint .",
+    "prepublishOnly": "pnpm build",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@ckb-ccc/core": "^1.22.0"
+  },
+  "peerDependencies": {
+    "@kweela/ledger": "^0.1.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@kweela/ledger": "link:../../halloffame.ng.plugins/packages/ledger",
+    "@types/node": "^25.0.0",
+    "eslint": "^10.8.0",
+    "eslint-config-prettier": "^10.1.8",
+    "prettier": "^3.9.6",
+    "tsdown": "^0.22.13",
+    "typescript": "^6.0.3",
+    "typescript-eslint": "^8.65.0",
+    "vitepress": "^1.6.4",
+    "vitest": "^4.1.10"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
