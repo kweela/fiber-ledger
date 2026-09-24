@@ -47,7 +47,7 @@ jobs:
         env:
           # A project site is served from /<repository>/, so every asset and
           # link has to be built against that path.
-          DOCS_BASE: /${{ github.event.repository.homepage }}/
+          DOCS_BASE: ${{ github.event.repository.homepage }}/
 
       - uses: actions/configure-pages@v5
 
