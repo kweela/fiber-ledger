@@ -31,7 +31,7 @@ export default defineConfig({
 
     socialLinks: [
       { icon: 'github', link: 'https://github.com/kweela/fiber-ledger' },
-      { icon: 'npm', link: 'https://www.npmjs.com/package/@kweela/fiber-ledger' }
+      { icon: 'npm', link: 'https://www.npmjs.com/package/@kweela/fiber-ledger' },
     ],
 
     sidebar: {
@@ -73,6 +73,7 @@ export default defineConfig({
           text: 'Operating it',
           items: [
             { text: 'Capabilities', link: '/guide/capabilities' },
+            { text: 'Running a node', link: '/guide/running-a-node' },
             { text: 'Health and shutdown', link: '/guide/health' },
             { text: 'Using @kweela/ledger', link: '/guide/shared-interface' },
             { text: 'Testing', link: '/guide/testing' },

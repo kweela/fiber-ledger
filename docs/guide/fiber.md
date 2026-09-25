@@ -8,6 +8,31 @@ CKB transaction for every payment.
 Fiber support is optional. Without it, `capabilities.fastPayments` is `false` and every transfer
 settles on chain.
 
+## When it earns its keep
+
+Fiber pays a **node**, not an address. `routeFor` has to resolve the destination to some other Fiber
+node's public key, and if it cannot, the transfer settles on chain.
+
+That makes the useful question not "is Fiber configured" but "is there a second node on the other
+end of this payment".
+
+| Paying                                             | Second node | Rail     |
+| -------------------------------------------------- | ----------- | -------- |
+| Between two wallets your own application custodies | No          | On chain |
+| To someone running their own Fiber node            | Yes         | Channel  |
+| To a service or exchange that accepts Fiber        | Yes         | Channel  |
+| Out to an ordinary CKB address                     | No          | On chain |
+
+The first row is worth dwelling on. If your application holds the keys for both sides of a transfer,
+both wallets sit behind the same Fiber node, there is nobody to route to, and every such payment
+settles on chain however Fiber is configured.
+
+**Fiber does not make transfers between your own users cheaper.** It earns its keep when value
+leaves your application to a counterparty who runs their own node.
+
+If that is not your situation yet, leave `fiber` unset. `capabilities.fastPayments` reports `false`,
+nothing else changes, and you can add it the day it becomes worth having.
+
 ## Configuring it
 
 ```ts

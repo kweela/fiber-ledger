@@ -6,5 +6,7 @@ export default defineConfig({
   dts: true,
   clean: true,
   sourcemap: true,
-  external: ['@kweela/ledger'],
+  deps: {
+    neverBundle: ['@kweela/ledger'],
+  }
 })

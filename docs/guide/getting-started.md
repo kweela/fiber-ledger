@@ -101,6 +101,7 @@ See [Settlement](./settlement).
 
 ## Next
 
+- [Running a node](./running-a-node) for devnet, testnet and mainnet setup
 - [Asset modes](./asset-modes) for native CKB and application tokens
 - [Wallets and custody](./wallets) for how keys are handled
 - [Fiber](./fiber) for fast off-chain payments
