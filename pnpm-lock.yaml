@@ -16,8 +16,8 @@ importers:
         specifier: ^10.0.1
         version: 10.0.1(eslint@10.11.0)
       '@kweela/ledger':
-        specifier: ^0.1.0
-        version: 0.1.0
+        specifier: ^0.1.1
+        version: 0.1.1
       '@types/node':
         specifier: ^25.0.0
         version: 25.9.8
@@ -397,8 +397,8 @@ packages:
   '@keyv/serialize@1.1.1':
     resolution: {integrity: sha512-dXn3FZhPv0US+7dtJsIi2R+c7qWYiReoEh5zUntWCf4oSpMNib8FDhSoed6m3QyZdx5hK7iLFkYk3rNxwt8vTA==}
 
-  '@kweela/ledger@0.1.0':
-    resolution: {integrity: sha512-n/J3JkcMUyL+88ETLR1/sZg/ICZgmm8r9vpsbU7ep6Vln0FqXvLD2t97mGLhtxEhpW63eBWR2SpS54zKFSF5qQ==}
+  '@kweela/ledger@0.1.1':
+    resolution: {integrity: sha512-WeFxrcsYeCUp2PW+mUUfF4i78DcZnyWp7vNXPJeijEpUY/Js5IslzLa1qy5tGJoh0K9i2a/JtlQktp4gp0IG+w==}
 
   '@napi-rs/lzma-linux-x64-gnu@1.5.1':
     resolution: {integrity: sha512-oTXEIha4SsuXdTA4Iyskj0kpdx2yVXdhd75c2v3xGrHFfVMsbhTPZU/nMPL4sWKo4pBHm3aucLaqGlF696dTyQ==}
@@ -2400,7 +2400,7 @@ snapshots:
 
   '@keyv/serialize@1.1.1': {}
 
-  '@kweela/ledger@0.1.0': {}
+  '@kweela/ledger@0.1.1': {}
 
   '@napi-rs/lzma-linux-x64-gnu@1.5.1':
     optional: true
