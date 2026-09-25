@@ -53,18 +53,51 @@ ckb run --indexer
 
 ### Point the ledger at it
 
-A devnet has no public node, so `url` is required.
+A devnet has no public node, so `url` is required. It also deploys its own scripts, so it has to
+say where they landed.
 
 ```ts
 const ledger = createFiberLedger({
   network: 'devnet',
   url: 'http://127.0.0.1:8114',
   confirmations: 1,
+  scripts: JSON.parse(readFileSync('devnet-scripts.json', 'utf8')),
 })
 ```
 
 `confirmations: 1` is worth setting. The default for a non-mainnet network is 4, and on a chain you
 are mining yourself that is four blocks you have to produce before anything reads as settled.
+
+::: warning
+A devnet can look healthy and still be unable to transfer
+A CKB transaction needs to know where the lock script it depends on is deployed. Those script locations are different for each network.
+
+The client already knows the deployments used by the public networks, but those references do not exist on a devnet you started yourself.
+
+That can be misleading because everything else may still look fine. Addresses are derived from the lock's code hash, so they still look valid. Balances come from the indexer, so they still load. The node responds normally, so health checks may appear green.
+
+The problem only shows up when you try to spend. The node rejects the transaction because the referenced script does not exist on that chain.
+
+[`health()`](/guide/health) checks that the configured lock deployment actually exists on the connected chain and reports the problem before it reaches a failed settlement.
+:::
+
+How you get the correct script configuration depends on how the devnet was created.
+
+If you are using [offckb](https://github.com/ckb-devrel/offckb), export the devnet scripts with:
+
+```sh
+offckb system-scripts --network devnet --export-style ccc | tail -n +3 > devnet-scripts.json
+```
+
+If you created the chain with:
+
+```sh
+ckb init --chain dev
+```
+
+the script deployments are already present in the genesis block. The code cells are outputs from the first transaction, while the dep groups are outputs from the second.
+
+See [Configuration](/reference/configuration#scripts) for the full `scripts` configuration format.
 
 ### Produce blocks
 

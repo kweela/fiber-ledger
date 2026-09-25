@@ -187,11 +187,13 @@ export class CkbChain {
   async health(): Promise<LedgerHealth> {
     try {
       const tip = await this.tip()
+      const where = `${this.network.name} at ${this.network.url ?? 'the public node'}`
+      const scripts = await this.missingScripts()
 
       return {
         reachable: true,
         blockHeight: Number(tip),
-        detail: `${this.network.name} at ${this.network.url ?? 'the public node'}`,
+        detail: scripts ? `${where}; ${scripts}` : where,
       }
     } catch (error) {
       return {
@@ -199,6 +201,35 @@ export class CkbChain {
         blockHeight: null,
         detail: error instanceof Error ? error.message : 'unreachable',
       }
+    }
+  }
+
+  /**
+   * Whether this chain actually holds the script code it is being told to name.
+   *
+   * Signing a transfer means pointing at the cell the lock's code lives in, and
+   * a node reached over a working connection will still refuse every one of
+   * them if that cell is not on its chain. It is the ordinary devnet mistake:
+   * addresses derive from a constant hash and so look right, balances read
+   * back, and nothing goes wrong until the first settlement.
+   *
+   * @returns what is wrong, or null when the deployment resolves
+   */
+  private async missingScripts(): Promise<string | null> {
+    try {
+      const info = await this.client.getKnownScript(ccc.KnownScript.Secp256k1Blake160)
+      const dep = info.cellDeps[0]
+      if (!dep) return 'no lock script deployment is configured for this network'
+
+      const cell = await this.client.getCell(dep.cellDep.outPoint)
+      if (cell) return null
+
+      return `the configured lock script cell is not on this chain, so transfers cannot be signed${
+        this.network.scripts ? '' : '; this network needs its script deployments configured'
+      }`
+    } catch {
+      /** A node that cannot answer this is already reported by the tip call. */
+      return null
     }
   }
 

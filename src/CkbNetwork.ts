@@ -1,8 +1,20 @@
+import { MAINNET_SCRIPTS, TESTNET_SCRIPTS } from '@ckb-ccc/core/advanced'
+
 import { MisconfiguredError } from '@kweela/ledger'
-import { ccc } from '@ckb-ccc/core'
 import type { Owner } from '@ckb-ccc/core'
+import { ccc } from '@ckb-ccc/core'
 
 export type CkbNetworkName = 'mainnet' | 'testnet' | 'devnet'
+
+/**
+ * Where a network's well-known scripts live, as CCC names them.
+ *
+ * A script is code in a cell, and spending a cell locked by one means naming
+ * the cell that code sits in. Those locations are fixed per network, so the
+ * public ones ship with the client; a private chain deploys its own and has to
+ * say where they landed.
+ */
+export type CkbScriptDeployments = Partial<Record<ccc.KnownScript, ccc.ScriptInfoLike>>
 
 export interface CkbNetworkOptions {
   name: CkbNetworkName
@@ -10,6 +22,8 @@ export interface CkbNetworkOptions {
   url?: string
   /** Blocks at which a transaction is treated as settled. */
   confirmations?: number
+  /** Where this network's scripts are deployed. Required for devnet. */
+  scripts?: CkbScriptDeployments
 }
 
 /**
@@ -43,6 +57,7 @@ export class CkbNetwork {
   readonly name: CkbNetworkName
   readonly url: string | null
   readonly confirmations: number
+  readonly scripts: CkbScriptDeployments | null
 
   constructor(options: CkbNetworkOptions) {
     if (options.name === 'devnet' && !options.url) {
@@ -52,6 +67,7 @@ export class CkbNetwork {
     this.name = options.name
     this.url = options.url ?? null
     this.confirmations = options.confirmations ?? (options.name === 'mainnet' ? 24 : 4)
+    this.scripts = options.scripts ?? null
   }
 
   get isMainnet(): boolean {
@@ -73,10 +89,22 @@ export class CkbNetwork {
    * never disposed keeps a connection open for the life of the process.
    */
   open(): Owner<ccc.ClientJsonRpc> {
-    const config = this.url ? { urls: [this.url] as [string] } : {}
+    const config = {
+      ...(this.url ? { urls: [this.url] as [string] } : {}),
+      ...(this.scripts ? { scripts: this.deployments() } : {}),
+    }
 
     return this.isMainnet
       ? ccc.ClientPublicMainnet.open(config)
       : ccc.ClientPublicTestnet.open(config)
+  }
+
+  /**
+   * Every script the client may look up, with this network's own on top.
+   */
+  private deployments(): CkbScriptDeployments {
+    const known = this.isMainnet ? MAINNET_SCRIPTS : TESTNET_SCRIPTS
+
+    return { ...known, ...this.scripts }
   }
 }

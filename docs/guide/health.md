@@ -21,8 +21,17 @@ When Fiber is configured, `detail` also reports whether the Fiber node answered.
 testnet at the public node; fiber up
 ```
 
+`detail` also reports a chain that does not hold the script code it is being told to name. This is
+the devnet mistake in [Running a node](/guide/running-a-node#point-the-ledger-at-it): every other
+signal reads as healthy, and only settlement fails.
+
+```text
+devnet at http://127.0.0.1:8114; the configured lock script cell is not on this chain, so transfers
+cannot be signed; this network needs its script deployments configured
+```
+
 A health check does not verify credentials, balances or channel liquidity. It answers whether the
-ledger can talk to what it depends on.
+ledger can talk to what it depends on, and whether that chain can carry a transfer at all.
 
 This gives applications one place to determine whether the ledger is ready to accept operations.
 

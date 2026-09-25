@@ -31,6 +31,86 @@ describe('CkbNetwork', () => {
   })
 
   /**
+   * A devnet deploys its own scripts, so the deployments the public client
+   * ships with name cells that chain has never held. Addresses still derive,
+   * because a code hash is a constant, which is what makes the mistake quiet
+   * until the first transaction is submitted.
+   */
+  it('leaves a devnet on the public deployments when it is not told otherwise', async () => {
+    const owner = new CkbNetwork({ name: 'devnet', url: 'http://localhost:8114' }).open()
+
+    try {
+      const devnet = await owner.value.getKnownScript(ccc.KnownScript.Secp256k1Blake160)
+      const publicOwner = new CkbNetwork({ name: 'testnet' }).open()
+      const testnetInfo = await publicOwner.value
+        .getKnownScript(ccc.KnownScript.Secp256k1Blake160)
+        .finally(() => publicOwner.dispose())
+
+      expect(devnet.cellDeps[0]?.cellDep.outPoint.txHash).toBe(
+        testnetInfo.cellDeps[0]?.cellDep.outPoint.txHash,
+      )
+    } finally {
+      await owner.dispose()
+    }
+  })
+
+  it('names a chain its own script deployments when it is given them', async () => {
+    const txHash = `0x${'ab'.repeat(32)}`
+    const owner = new CkbNetwork({
+      name: 'devnet',
+      url: 'http://localhost:8114',
+      scripts: {
+        [ccc.KnownScript.Secp256k1Blake160]: {
+          codeHash: `0x${'cd'.repeat(32)}`,
+          hashType: 'type',
+          cellDeps: [{ cellDep: { outPoint: { txHash, index: 0 }, depType: 'depGroup' } }],
+        },
+      },
+    }).open()
+
+    try {
+      const info = await owner.value.getKnownScript(ccc.KnownScript.Secp256k1Blake160)
+
+      expect(info.codeHash).toBe(`0x${'cd'.repeat(32)}`)
+      expect(info.cellDeps[0]?.cellDep.outPoint.txHash).toBe(txHash)
+    } finally {
+      await owner.dispose()
+    }
+  })
+
+  /**
+   * Fee calculation looks the DAO up on every transfer just to rule it out, so
+   * a devnet map listing only what that chain deploys has to leave the rest of
+   * the client's lookups answerable or nothing can be sent at all.
+   */
+  it('keeps the scripts a configured chain did not mention', async () => {
+    const owner = new CkbNetwork({
+      name: 'devnet',
+      url: 'http://localhost:8114',
+      scripts: {
+        [ccc.KnownScript.Secp256k1Blake160]: {
+          codeHash: `0x${'cd'.repeat(32)}`,
+          hashType: 'type',
+          cellDeps: [
+            {
+              cellDep: {
+                outPoint: { txHash: `0x${'ab'.repeat(32)}`, index: 0 },
+                depType: 'depGroup',
+              },
+            },
+          ],
+        },
+      },
+    }).open()
+
+    try {
+      await expect(owner.value.getKnownScript(ccc.KnownScript.NervosDao)).resolves.toBeDefined()
+    } finally {
+      await owner.dispose()
+    }
+  })
+
+  /**
    * A cell pays for its own bytes, so the smallest transfer is an occupied
    * cell rather than one shannon.
    */

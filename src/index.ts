@@ -2,7 +2,7 @@ import { MisconfiguredError } from '@kweela/ledger'
 
 import { CkbChain } from './CkbChain'
 import { FiberLedger, type FiberLedgerOptions } from './FiberLedger'
-import { CkbNetwork, type CkbNetworkName } from './CkbNetwork'
+import { CkbNetwork, type CkbNetworkName, type CkbScriptDeployments } from './CkbNetwork'
 import { FiberClient } from './fiber/FiberClient'
 import { FiberPaymentRail, type FiberRoute } from './fiber/FiberPaymentRail'
 import { NativeCapacityAsset } from './assets/NativeCapacityAsset'
@@ -12,7 +12,12 @@ import { CkbKeyring } from './CkbKeyring'
 export { CkbChain } from './CkbChain'
 export { CkbKeyring } from './CkbKeyring'
 export { FiberLedger, type FiberLedgerOptions } from './FiberLedger'
-export { CkbNetwork, type CkbNetworkName, type CkbNetworkOptions } from './CkbNetwork'
+export {
+  CkbNetwork,
+  type CkbNetworkName,
+  type CkbNetworkOptions,
+  type CkbScriptDeployments,
+} from './CkbNetwork'
 export { CkbAssetStrategy } from './assets/CkbAssetStrategy'
 export { NativeCapacityAsset } from './assets/NativeCapacityAsset'
 export { UdtAsset, type UdtAssetOptions } from './assets/UdtAsset'
@@ -25,6 +30,15 @@ export interface FiberLedgerConfig {
   /** A node to talk to instead of the public one. Required for devnet. */
   url?: string
   confirmations?: number
+
+  /**
+   * Where this network's scripts are deployed.
+   *
+   * Only a devnet needs this, and every devnet does: the public deployments
+   * the client ships with do not exist on a chain started from scratch, so
+   * without them transactions are built naming cells that are not there.
+   */
+  scripts?: CkbScriptDeployments
 
   /**
    * What balances are denominated in.
@@ -62,6 +76,7 @@ export function createFiberLedger(config: FiberLedgerConfig): FiberLedger {
     name: config.network,
     url: config.url,
     confirmations: config.confirmations,
+    scripts: config.scripts,
   })
   const chain = new CkbChain(network)
   const fiber = config.fiber
