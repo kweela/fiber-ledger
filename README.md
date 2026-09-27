@@ -20,6 +20,12 @@ pnpm add @kweela/ledger @kweela/fiber-ledger
 
 Node 20 or newer is required.
 
+React applications that connect browser or mobile wallets also install the connector peer:
+
+```sh
+pnpm add @ckb-ccc/connector-react react
+```
+
 ## Basic usage
 
 ```ts
@@ -89,6 +95,7 @@ The ledger handles the CKB and Fiber-specific work internally and exposes a smal
 
 - [Asset modes](https://fiberledger.kweela.com/guide/asset-modes) — native CKB, or a token stored on CKB through xUDT or sUDT
 - [Wallets and custody](https://fiberledger.kweela.com/guide/wallets) — creating, importing, exporting, and wallets controlled elsewhere
+- [React wallet connector](https://fiberledger.kweela.com/guide/react-wallet-connector) — JoyID, Neuron, compatible wallets, approval requests, and lifecycle events
 - [Fiber](https://fiberledger.kweela.com/guide/fiber) — fast off-chain payments, and falling back to the chain when no route exists
 - [Idempotency](https://fiberledger.kweela.com/guide/idempotency) — making retries safe before moving real value
 - [Errors](https://fiberledger.kweela.com/reference/errors) — the fixed set of failures CKB and Fiber conditions are translated into

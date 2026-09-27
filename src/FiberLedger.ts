@@ -105,6 +105,11 @@ export class FiberLedger extends BaseLedger {
     return this.strategy.asset
   }
 
+  /** The asset strategy owns the cell-size rule for capacity and tokens. */
+  get minimumTransfer(): Amount {
+    return Amount.of(this.strategy.minimumTransfer, this.asset)
+  }
+
   /**
    * Whether an operation is backed by anything here.
    *

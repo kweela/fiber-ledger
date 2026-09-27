@@ -1,12 +1,12 @@
 import { defineConfig } from 'tsdown'
 
 export default defineConfig({
-  entry: ['src/index.ts'],
+  entry: ['src/index.ts', 'src/react.tsx'],
   format: 'esm',
   dts: true,
   clean: true,
   sourcemap: true,
   deps: {
-    neverBundle: ['@kweela/ledger'],
-  }
+    neverBundle: ['@kweela/ledger', 'react'],
+  },
 })

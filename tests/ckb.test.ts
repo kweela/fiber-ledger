@@ -220,6 +220,12 @@ describe('what is being counted', () => {
     expect(capacity.buildMint).toBe(undefined)
   })
 
+  it('publishes the occupied-cell floor to ledger consumers', () => {
+    const ledger = createFiberLedger({ network: 'testnet' })
+
+    expect(ledger.minimumTransfer.toUnits()).toBe('61')
+  })
+
   it('refuses a capacity transfer the chain would reject for being too small', async () => {
     const capacity = new NativeCapacityAsset(chain)
     const tiny = Amount.of(1n, capacity.asset)

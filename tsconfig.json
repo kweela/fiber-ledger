@@ -5,6 +5,7 @@
     "forceConsistentCasingInFileNames": true,
     "module": "ESNext",
     "moduleResolution": "bundler",
+    "jsx": "react-jsx",
     "noUncheckedIndexedAccess": true,
     "outDir": "dist",
     "rootDir": ".",

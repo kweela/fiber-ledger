@@ -23,12 +23,16 @@ External wallets can be used for operations that do not require local custody:
 - acting as transfer destinations
 - transaction lookup
 
-Outgoing transactions remain the responsibility of whoever controls the external wallet.
+Outgoing transactions remain the responsibility of whoever controls the external wallet. React
+applications can ask the wallet to construct, approve, and submit a native CKB capacity transfer
+through the [React wallet connector](./react-wallet-connector).
 
 ## What they cannot do
 
-Anything that signs. A transfer or withdrawal from an external wallet fails with `wallet_locked`,
-because the ledger has no material to sign with and cannot obtain any.
+The server-side ledger cannot sign for an external wallet. Calling a transfer or withdrawal there
+still fails with `wallet_locked`, because the server has no custody material. Signing must happen in
+the wallet through the connector, and the application should verify the submitted transaction
+before treating it as payment.
 
 ## Addresses from another network
 

@@ -49,6 +49,7 @@ export default defineConfig({
           items: [
             { text: 'Wallets and custody', link: '/guide/wallets' },
             { text: 'External wallets', link: '/guide/external-wallets' },
+            { text: 'React wallet connector', link: '/guide/react-wallet-connector' },
           ],
         },
         {
