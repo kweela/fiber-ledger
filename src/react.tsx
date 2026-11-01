@@ -22,6 +22,13 @@ export interface FiberWalletConnection {
   walletName: string
 }
 
+export interface FiberSignedMessage {
+  address: string
+  signature: string
+  identity: string
+  signType: string
+}
+
 export interface FiberTransferApproval {
   exchangeId: string
   destination: string
@@ -33,6 +40,7 @@ interface FiberWalletContextValue {
   open: () => void
   disconnect: () => void
   approveCapacityTransfer: (approval: FiberTransferApproval) => Promise<string>
+  signMessage: (message: string) => Promise<FiberSignedMessage>
 }
 
 const FiberWalletContext = createContext<FiberWalletContextValue | null>(null)
@@ -96,9 +104,29 @@ function FiberWalletSession({ children }: { children: ReactNode }) {
     [signerInfo],
   )
 
+  const signMessage = useCallback(
+    async (message: string) => {
+      if (!signerInfo) throw new Error('Connect the wallet that will sign this message.')
+
+      const signer = signerInfo.signer
+      const [address, signed] = await Promise.all([
+        signer.getRecommendedAddress(),
+        signer.signMessage(message),
+      ])
+
+      return {
+        address,
+        signature: signed.signature,
+        identity: signed.identity,
+        signType: signed.signType,
+      }
+    },
+    [signerInfo],
+  )
+
   const value = useMemo(
-    () => ({ connection, open, disconnect, approveCapacityTransfer }),
-    [connection, open, disconnect, approveCapacityTransfer],
+    () => ({ connection, open, disconnect, approveCapacityTransfer, signMessage }),
+    [connection, open, disconnect, approveCapacityTransfer, signMessage],
   )
 
   return <FiberWalletContext.Provider value={value}>{children}</FiberWalletContext.Provider>

@@ -79,6 +79,23 @@ The application server must look up the returned transaction and verify its send
 asset, amount, and uniqueness before granting coins, goods, or account credit. A transaction hash
 from the browser is not proof of payment by itself.
 
+## Sign a message
+
+`signMessage` asks the selected wallet to sign a plain-text message and resolves to the signature
+with the signer's recommended address.
+
+```tsx
+const { signMessage } = useFiberWallet()
+
+const { address, signature, identity, signType } = await signMessage(challenge.message)
+
+await api.verifyOwnership(challenge.id, { address, signature, identity, signType })
+```
+
+`identity` and `signType` are what `ccc.Signer.verifyMessage` needs to check the signature. The
+server must verify it and decide what the signing key controls; a signature returned to the browser
+grants nothing by itself.
+
 ## Events
 
 Every wallet lifecycle event is dispatched on `window` as a `CustomEvent`. Import the stable names
