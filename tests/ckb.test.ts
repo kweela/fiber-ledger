@@ -372,6 +372,22 @@ describe('acting for a wallet', () => {
     expect(exported.secret.payload).toBe(wallet.secret?.payload)
   })
 
+  it('signs a message any CKB verifier traces back to the wallet', async () => {
+    const wallet = await ledger.createWallet({ ownerKey: 'sign', idempotencyKey: 'create:sign' })
+    const signed = await ledger.signMessage({ wallet, message: 'prove it' })
+    const signature = new ccc.Signature(
+      signed.signature,
+      signed.identity,
+      signed.signType as ccc.SignerSignType,
+    )
+    const signer = new ccc.SignerCkbPublicKey(new ccc.ClientPublicTestnet(), signed.identity)
+
+    expect(signed.signType).toBe(ccc.SignerSignType.CkbSecp256k1)
+    expect(await ccc.Signer.verifyMessage('prove it', signature)).toBe(true)
+    expect(await ccc.Signer.verifyMessage('something else', signature)).toBe(false)
+    expect(await signer.getRecommendedAddress()).toBe(wallet.address)
+  })
+
   it('attaches a wallet the owner already controls without holding its key', async () => {
     const theirs = await ledger.createWallet({ ownerKey: 'd', idempotencyKey: 'create:3' })
     const attached = await ledger.createWallet({

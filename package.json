@@ -1,6 +1,6 @@
 {
   "name": "@kweela/fiber-ledger",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "description": "A CKB ledger with Fiber payment channels: embedded wallets, capacity and xUDT balances, and off-chain settlement",
   "type": "module",
   "license": "MIT",
@@ -50,7 +50,7 @@
   },
   "peerDependencies": {
     "@ckb-ccc/connector-react": "^2.2.2",
-    "@kweela/ledger": "^0.1.2",
+    "@kweela/ledger": "^0.1.3",
     "react": ">=18"
   },
   "devDependencies": {
