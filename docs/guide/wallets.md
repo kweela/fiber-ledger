@@ -87,3 +87,16 @@ back is that same material alongside the address it controls.
 
 This is what transferring ownership looks like: the owner receives the key the application was
 storing on their behalf. Calling it without the secret fails with `wallet_locked`.
+
+## Signing a message
+
+```ts
+const signed = await ledger.signMessage({
+  wallet: { reference: wallet.reference, secret: await store.openSecret(wallet.reference) },
+  message,
+})
+```
+
+The wallet's secp256k1 key signs the message the way any CKB wallet does, so `signature`,
+`identity` (the public key) and `signType` (`CkbSecp256k1`) verify with `ccc.Signer.verifyMessage`.
+Nothing is sent to the chain. Calling it without the secret fails with `wallet_locked`.

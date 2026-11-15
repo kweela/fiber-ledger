@@ -16,6 +16,7 @@ ledger.capabilities.withdrawals
 ledger.capabilities.selfCustody
 ledger.capabilities.externalWallets
 ledger.capabilities.fastPayments
+ledger.capabilities.messageSigning
 ```
 
 ## What decides each one
@@ -31,6 +32,7 @@ ledger.capabilities.fastPayments
 | `memos`                 | Never: CKB transfers carry no memo               |
 | `instantSettlement`     | Never: on-chain movements wait for confirmations |
 | `confirmationsRequired` | The configured depth, or the network default     |
+| `messageSigning`        | Always, for a wallet whose key is supplied       |
 
 For example:
 

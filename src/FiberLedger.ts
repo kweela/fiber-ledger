@@ -21,6 +21,8 @@ import {
   type LedgerOperation,
   type ListTransactionsInput,
   type MintInput,
+  type SignMessageInput,
+  type SignedMessage,
   type TransactionPage,
   type TransactionRef,
   type TransferInput,
@@ -98,6 +100,7 @@ export class FiberLedger extends BaseLedger {
       memos: false,
       instantSettlement: false,
       confirmationsRequired: this.network.confirmations,
+      messageSigning: true,
     }
   }
 
@@ -307,6 +310,22 @@ export class FiberLedger extends BaseLedger {
       address: await this.keyring.addressOf(secret, this.chain.client),
       secret,
       mnemonic: null,
+    }
+  }
+
+  /**
+   * Signs a message with the wallet's secp256k1 key, as any CKB wallet would.
+   *
+   * @param input
+   * @returns
+   */
+  protected override async performSignMessage(input: SignMessageInput): Promise<SignedMessage> {
+    const signed = await this.signerFor(input.wallet).signMessage(input.message)
+
+    return {
+      signature: signed.signature,
+      identity: signed.identity,
+      signType: signed.signType,
     }
   }
 
