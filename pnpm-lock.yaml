@@ -11,6 +11,9 @@ importers:
       '@ckb-ccc/core':
         specifier: ^1.23.0
         version: 1.23.0(typescript@6.0.3)
+      '@ckb-ccc/did-ckb':
+        specifier: ^0.2.15
+        version: 0.2.15(typescript@6.0.3)
     devDependencies:
       '@ckb-ccc/connector-react':
         specifier: ^2.2.2
@@ -19,8 +22,8 @@ importers:
         specifier: ^10.0.1
         version: 10.0.1(eslint@10.15.0)
       '@kweela/ledger':
-        specifier: ^0.1.3
-        version: 0.1.3
+        specifier: ^0.1.4
+        version: 0.1.4
       '@types/node':
         specifier: ^25.9.9
         version: 25.9.9
@@ -354,8 +357,8 @@ packages:
   '@keyv/serialize@1.1.1':
     resolution: {integrity: sha512-dXn3FZhPv0US+7dtJsIi2R+c7qWYiReoEh5zUntWCf4oSpMNib8FDhSoed6m3QyZdx5hK7iLFkYk3rNxwt8vTA==}
 
-  '@kweela/ledger@0.1.3':
-    resolution: {integrity: sha512-Fy0LbdkU2qLhsRk+69VEhk23YftGv1fcsGTB+6QdxlYmJ1tRGn8cNloQoflXwiJZcDzMsyRudpa19EkK6oq8eQ==}
+  '@kweela/ledger@0.1.4':
+    resolution: {integrity: sha512-D6bBn60b+U3GnUUWVdIncsw8/zuZ0Pln7ZzaiI4cheFBeG8+5YdaoWlm5Qu/uI4M9GVjRk90rLh7ASatmrHYbA==}
 
   '@leichtgewicht/ip-codec@2.0.5':
     resolution: {integrity: sha512-Vo+PSpZG2/fmgmiNzYK9qWRh8h/CHrwD0mo1h1DzL4yzHNSfWYujGTYsWGreD000gcgmZ7K4Ys6Tx9TxtsKdDw==}
@@ -3659,7 +3662,7 @@ snapshots:
 
   '@keyv/serialize@1.1.1': {}
 
-  '@kweela/ledger@0.1.3': {}
+  '@kweela/ledger@0.1.4': {}
 
   '@leichtgewicht/ip-codec@2.0.5': {}
 

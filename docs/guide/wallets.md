@@ -100,3 +100,20 @@ const signed = await ledger.signMessage({
 The wallet's secp256k1 key signs the message the way any CKB wallet does, so `signature`,
 `identity` (the public key) and `signType` (`CkbSecp256k1`) verify with `ccc.Signer.verifyMessage`.
 Nothing is sent to the chain. Calling it without the secret fails with `wallet_locked`.
+
+## Issuing a DID
+
+```ts
+const issued = await ledger.issueIdentity({
+  wallet: { reference: wallet.reference, secret: await store.openSecret(wallet.reference) },
+  idempotencyKey,
+})
+```
+
+This creates a did:ckb cell with an empty document, owned by the wallet's own lock. `identifier` is
+the `did:ckb:` DID and `reference` is the transaction hash. The cell's capacity and the fee come from
+the wallet, so it needs enough CKB to cover the deposit; otherwise the call fails with
+`insufficient_funds`. The DID resolves once the transaction confirms.
+
+A wallet connected in the browser does the same through `useFiberWallet().issueIdentity()`, which
+asks the wallet to approve the transaction and returns `{ did, reference }`.

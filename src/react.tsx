@@ -9,6 +9,8 @@ import {
   type ReactNode,
 } from 'react'
 
+import { CkbIdentityIssuer } from './CkbIdentityIssuer'
+
 export const FIBER_WALLET_EVENTS = {
   connected: 'fiber-wallet-connected',
   disconnected: 'fiber-wallet-disconnected',
@@ -35,12 +37,18 @@ export interface FiberTransferApproval {
   amountMinor: string
 }
 
+export interface FiberIssuedIdentity {
+  did: string
+  reference: string
+}
+
 interface FiberWalletContextValue {
   connection: FiberWalletConnection | null
   open: () => void
   disconnect: () => void
   approveCapacityTransfer: (approval: FiberTransferApproval) => Promise<string>
   signMessage: (message: string) => Promise<FiberSignedMessage>
+  issueIdentity: () => Promise<FiberIssuedIdentity>
 }
 
 const FiberWalletContext = createContext<FiberWalletContextValue | null>(null)
@@ -124,9 +132,19 @@ function FiberWalletSession({ children }: { children: ReactNode }) {
     [signerInfo],
   )
 
+  const issueIdentity = useCallback(async () => {
+    if (!signerInfo) throw new Error('Connect the wallet that will hold this identity.')
+
+    const signer = signerInfo.signer
+    const draft = await CkbIdentityIssuer.draft(signer)
+    const reference = await signer.sendTransaction(draft.transaction)
+
+    return { did: draft.did, reference }
+  }, [signerInfo])
+
   const value = useMemo(
-    () => ({ connection, open, disconnect, approveCapacityTransfer, signMessage }),
-    [connection, open, disconnect, approveCapacityTransfer, signMessage],
+    () => ({ connection, open, disconnect, approveCapacityTransfer, signMessage, issueIdentity }),
+    [connection, open, disconnect, approveCapacityTransfer, signMessage, issueIdentity],
   )
 
   return <FiberWalletContext.Provider value={value}>{children}</FiberWalletContext.Provider>

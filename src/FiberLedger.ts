@@ -13,6 +13,8 @@ import {
   type DepositInput,
   type DepositIntent,
   type ImportWalletInput,
+  type IssueIdentityInput,
+  type IssuedIdentity,
   type LedgerBalance,
   type LedgerCapabilities,
   type LedgerHealth,
@@ -32,6 +34,7 @@ import {
 } from '@kweela/ledger'
 
 import { CkbChain } from './CkbChain'
+import { CkbIdentityIssuer } from './CkbIdentityIssuer'
 import { CkbKeyring } from './CkbKeyring'
 import { CkbNetwork } from './CkbNetwork'
 import { CkbAssetStrategy } from './assets/CkbAssetStrategy'
@@ -101,6 +104,7 @@ export class FiberLedger extends BaseLedger {
       instantSettlement: false,
       confirmationsRequired: this.network.confirmations,
       messageSigning: true,
+      identityIssuance: true,
     }
   }
 
@@ -327,6 +331,22 @@ export class FiberLedger extends BaseLedger {
       identity: signed.identity,
       signType: signed.signType,
     }
+  }
+
+  /**
+   * Create a did:ckb cell owned by the wallet, paid for from its own capacity.
+   *
+   * @param input
+   * @returns
+   */
+  protected override async performIssueIdentity(
+    input: IssueIdentityInput,
+  ): Promise<IssuedIdentity> {
+    const signer = this.signerFor(input.wallet)
+    const draft = await this.chain.call(() => CkbIdentityIssuer.draft(signer))
+    const reference = await this.chain.submit(draft.transaction, signer)
+
+    return { identifier: draft.did, reference }
   }
 
   protected override async performMint(input: MintInput): Promise<LedgerTransaction> {
