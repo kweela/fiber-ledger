@@ -1,0 +1,71 @@
+name: Publish
+
+# Publishes the package to npm, either by hand with an explicit version or when
+# a GitHub release is published, using the release tag (a leading "v" is dropped).
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: Version to publish, such as 1.2.3 or 1.3.0-beta.1
+        required: true
+        type: string
+  release:
+    types: [published]
+
+permissions:
+  contents: read
+  id-token: write
+
+concurrency:
+  group: publish
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: pnpm/action-setup@v6
+        with:
+          version: 11
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 22
+          cache: pnpm
+          registry-url: https://registry.npmjs.org
+
+      - name: Resolve version
+        id: version
+        env:
+          INPUT_VERSION: ${{ github.event_name == 'release' && github.event.release.tag_name || inputs.version }}
+        run: |
+          version="${INPUT_VERSION#v}"
+
+          if ! [[ "$version" =~ ^[0-9]+\.[0-9]+\.[0-9]+(-[0-9A-Za-z.-]+)?(\+[0-9A-Za-z.-]+)?$ ]]; then
+            echo "::error::'$INPUT_VERSION' is not a semantic version"
+            exit 1
+          fi
+
+          # Prereleases go to the "next" dist-tag so they never become "latest".
+          if [[ "$version" == *-* ]]; then tag=next; else tag=latest; fi
+
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+          echo "tag=$tag" >> "$GITHUB_OUTPUT"
+
+      - run: pnpm install --frozen-lockfile
+
+      - name: Set package version
+        run: npm pkg set version=${{ steps.version.outputs.version }}
+
+      - name: Check
+        run: pnpm check
+
+      - name: Pack
+        run: pnpm pack --pack-destination "$RUNNER_TEMP/pack"
+
+      - name: Publish
+        run: npm publish "$RUNNER_TEMP"/pack/*.tgz --access public --provenance --tag ${{ steps.version.outputs.tag }}
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
