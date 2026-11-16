@@ -115,5 +115,8 @@ the `did:ckb:` DID and `reference` is the transaction hash. The cell's capacity 
 the wallet, so it needs enough CKB to cover the deposit; otherwise the call fails with
 `insufficient_funds`. The DID resolves once the transaction confirms.
 
-A wallet connected in the browser does the same through `useFiberWallet().issueIdentity()`, which
-asks the wallet to approve the transaction and returns `{ did, reference }`.
+A wallet connected in the browser does the same in two steps. `useFiberWallet().prepareIdentity()`
+builds the transaction and returns `{ did, send }`; `send()` asks the wallet to approve it and
+returns `{ did, reference }`. Call `send` straight from a click, because a popup wallet such as
+JoyID is blocked when its window opens long after the gesture. `issueIdentity()` runs both steps
+at once for wallets that do not open a popup.
