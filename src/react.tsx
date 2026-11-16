@@ -42,12 +42,24 @@ export interface FiberIssuedIdentity {
   reference: string
 }
 
+/**
+ * A DID transaction built and ready for the wallet.
+ *
+ * `send` opens the wallet's approval, so call it straight from a click: browsers block a
+ * popup that opens long after the gesture that asked for it.
+ */
+export interface FiberIdentityRequest {
+  did: string
+  send: () => Promise<FiberIssuedIdentity>
+}
+
 interface FiberWalletContextValue {
   connection: FiberWalletConnection | null
   open: () => void
   disconnect: () => void
   approveCapacityTransfer: (approval: FiberTransferApproval) => Promise<string>
   signMessage: (message: string) => Promise<FiberSignedMessage>
+  prepareIdentity: () => Promise<FiberIdentityRequest>
   issueIdentity: () => Promise<FiberIssuedIdentity>
 }
 
@@ -132,19 +144,48 @@ function FiberWalletSession({ children }: { children: ReactNode }) {
     [signerInfo],
   )
 
-  const issueIdentity = useCallback(async () => {
+  const prepareIdentity = useCallback(async (): Promise<FiberIdentityRequest> => {
     if (!signerInfo) throw new Error('Connect the wallet that will hold this identity.')
 
     const signer = signerInfo.signer
     const draft = await CkbIdentityIssuer.draft(signer)
-    const reference = await signer.sendTransaction(draft.transaction)
+    const prepared = await signer.prepareTransaction(draft.transaction)
 
-    return { did: draft.did, reference }
+    return {
+      did: draft.did,
+      send: async () => {
+        const signed = await signer.signOnlyTransaction(prepared)
+        const reference = await signer.client.sendTransaction(signed)
+
+        return { did: draft.did, reference }
+      },
+    }
   }, [signerInfo])
 
+  const issueIdentity = useCallback(
+    async () => (await prepareIdentity()).send(),
+    [prepareIdentity],
+  )
+
   const value = useMemo(
-    () => ({ connection, open, disconnect, approveCapacityTransfer, signMessage, issueIdentity }),
-    [connection, open, disconnect, approveCapacityTransfer, signMessage, issueIdentity],
+    () => ({
+      connection,
+      open,
+      disconnect,
+      approveCapacityTransfer,
+      signMessage,
+      prepareIdentity,
+      issueIdentity,
+    }),
+    [
+      connection,
+      open,
+      disconnect,
+      approveCapacityTransfer,
+      signMessage,
+      prepareIdentity,
+      issueIdentity,
+    ],
   )
 
   return <FiberWalletContext.Provider value={value}>{children}</FiberWalletContext.Provider>
