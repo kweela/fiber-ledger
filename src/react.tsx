@@ -162,10 +162,7 @@ function FiberWalletSession({ children }: { children: ReactNode }) {
     }
   }, [signerInfo])
 
-  const issueIdentity = useCallback(
-    async () => (await prepareIdentity()).send(),
-    [prepareIdentity],
-  )
+  const issueIdentity = useCallback(async () => (await prepareIdentity()).send(), [prepareIdentity])
 
   const value = useMemo(
     () => ({
