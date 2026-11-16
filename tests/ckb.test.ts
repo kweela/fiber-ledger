@@ -348,6 +348,15 @@ describe('acting for a wallet', () => {
     ).rejects.toMatchObject({ code: 'wallet_locked' })
   })
 
+  it('refuses to issue an identity from a wallet whose material it was not given', async () => {
+    const wallet = await ledger.createWallet({ ownerKey: 'a', idempotencyKey: 'a' })
+
+    expect(ledger.capabilities.identityIssuance).toBe(true)
+    await expect(
+      ledger.issueIdentity({ wallet: { reference: wallet.reference }, idempotencyKey: 'did-1' }),
+    ).rejects.toMatchObject({ code: 'wallet_locked' })
+  })
+
   it('names the wallet by the address it controls', async () => {
     const wallet = await ledger.createWallet({ ownerKey: 'a', idempotencyKey: 'create:1' })
 

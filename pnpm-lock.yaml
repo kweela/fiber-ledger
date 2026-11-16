@@ -11,6 +11,9 @@ importers:
       '@ckb-ccc/core':
         specifier: ^1.23.0
         version: 1.23.0(typescript@6.0.3)
+      '@ckb-ccc/did-ckb':
+        specifier: ^0.2.15
+        version: 0.2.15(typescript@6.0.3)
     devDependencies:
       '@ckb-ccc/connector-react':
         specifier: ^2.2.2

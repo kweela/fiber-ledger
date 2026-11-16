@@ -17,6 +17,7 @@ ledger.capabilities.selfCustody
 ledger.capabilities.externalWallets
 ledger.capabilities.fastPayments
 ledger.capabilities.messageSigning
+ledger.capabilities.identityIssuance
 ```
 
 ## What decides each one
@@ -33,6 +34,7 @@ ledger.capabilities.messageSigning
 | `instantSettlement`     | Never: on-chain movements wait for confirmations |
 | `confirmationsRequired` | The configured depth, or the network default     |
 | `messageSigning`        | Always, for a wallet whose key is supplied       |
+| `identityIssuance`      | Always, for a wallet whose key is supplied       |
 
 For example:
 

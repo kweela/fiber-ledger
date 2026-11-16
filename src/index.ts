@@ -11,6 +11,7 @@ import { CkbKeyring } from './CkbKeyring'
 
 export { CkbChain } from './CkbChain'
 export { CkbKeyring } from './CkbKeyring'
+export { CkbIdentityIssuer, type CkbIdentityDraft } from './CkbIdentityIssuer'
 export { FiberLedger, type FiberLedgerOptions } from './FiberLedger'
 export {
   CkbNetwork,
